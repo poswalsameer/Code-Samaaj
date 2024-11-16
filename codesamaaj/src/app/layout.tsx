@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import UserDetailContextProvider from "./context/UserDetailContextProvider";
 import localFont from "next/font/local";
 import { Inter } from 'next/font/google';
 import "./globals.css";
+import type { Metadata } from "next";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,12 +32,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={inter.className}
-      >
-        {children}
-      </body>
-    </html>
+    <UserDetailContextProvider>
+      <html lang="en">
+        <body
+          className={inter.className}
+        >
+          {children}
+        </body>
+      </html>
+    </UserDetailContextProvider>
   );
 }
