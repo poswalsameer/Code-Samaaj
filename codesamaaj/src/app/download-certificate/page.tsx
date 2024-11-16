@@ -5,6 +5,7 @@ import { jsPDF } from "jspdf";
 import { Button } from "@/components/ui/button";
 import { Download } from 'lucide-react'
 import userDetailContext from "../context/UserDetailContext";
+import toast, { Toaster } from 'react-hot-toast';
 
 const Certificate = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -30,9 +31,14 @@ const Certificate = () => {
     console.log("Name in the state: ", name);
 
     if (!username) {
-      alert("Please enter your name.");
+      toast.error("Name of the user not found");
       return;
     }
+    if( !userEmail ){
+      toast.error("Email of the user not found");
+      return;
+    }
+
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -55,7 +61,6 @@ const Certificate = () => {
       const nameY = canvas.height / 2 + 20;
       ctx.fillText(username, nameX, nameY);
 
-      // Convert canvas to PDF
       const pdf = new jsPDF({
         orientation: "landscape",
         unit: "px",
@@ -89,6 +94,7 @@ const Certificate = () => {
           >
             <Download className="h-4 w-4" />
             <span>Download Certificate</span>
+            <Toaster />
           </Button>
         </div>
       </div>
