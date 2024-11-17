@@ -5,11 +5,13 @@ import { jsPDF } from "jspdf";
 import { Button } from "@/components/ui/button";
 import { Download } from 'lucide-react'
 import userDetailContext from "../context/UserDetailContext";
-import toast, { Toaster } from 'react-hot-toast';
+import { useToast } from "@/hooks/use-toast"
 
 const Certificate = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const { toast } = useToast();
 
   const context = useContext(userDetailContext);
   if( context === undefined ){
@@ -31,11 +33,15 @@ const Certificate = () => {
     console.log("Name in the state: ", name);
 
     if (!username) {
-      toast.error("Name of the user not found");
+      toast({
+        title: "Name of the user not found",
+      })
       return;
     }
     if( !userEmail ){
-      toast.error("Email of the user not found");
+      toast({
+        title: "Email of the user not found",
+      })
       return;
     }
 
@@ -94,7 +100,6 @@ const Certificate = () => {
           >
             <Download className="h-4 w-4" />
             <span>Download Certificate</span>
-            <Toaster />
           </Button>
         </div>
       </div>
@@ -103,46 +108,3 @@ const Certificate = () => {
 };
 
 export default Certificate;
-
-// <div style={{ textAlign: "center", margin: "20px" }}>
-    //   <h1>Certificate Generator</h1>
-    //   <input
-    //     type="text"
-    //     ref={nameInputRef}
-    //     placeholder="Enter your name"
-    //     style={{
-    //       padding: "10px",
-    //       fontSize: "16px",
-    //       width: "300px",
-    //       marginBottom: "20px",
-    //     }}
-    //   />
-    //   <br />
-    //   <button
-    //     onClick={handleGenerateCertificate}
-    //     style={{
-    //       padding: "10px 20px",
-    //       fontSize: "16px",
-    //       margin: "5px",
-    //       cursor: "pointer",
-    //     }}
-    //   >
-    //     Download JPG
-    //   </button>
-    //   <button
-    //     onClick={handleGeneratePDF}
-    //     style={{
-    //       padding: "10px 20px",
-    //       fontSize: "16px",
-    //       margin: "5px",
-    //       cursor: "pointer",
-    //     }}
-    //   >
-    //     Download PDF
-    //   </button>
-    //   <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
-    // </div>
-
-
-    
-  // const handleGenerateCertificate = () => {

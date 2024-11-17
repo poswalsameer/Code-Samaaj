@@ -1,4 +1,5 @@
 import UserDetailContextProvider from "./context/UserDetailContextProvider";
+import { Toaster } from "@/components/ui/toaster"
 import localFont from "next/font/local";
 import { Inter } from 'next/font/google';
 import "./globals.css";
@@ -38,6 +39,7 @@ export default function RootLayout({
           className={inter.className}
         >
           {children}
+          <Toaster />
         </body>
       </html>
     </UserDetailContextProvider>

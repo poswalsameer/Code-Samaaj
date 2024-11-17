@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 import userDetailContext from "./context/UserDetailContext";
-import toast, { Toaster } from 'react-hot-toast';
+import { useToast } from "@/hooks/use-toast"
+
 
 export default function Home() {
   const userEmailData = [
@@ -87,6 +88,7 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
+  const { toast } = useToast();
 
   // CONTEXT
   const context = useContext(userDetailContext);
@@ -98,7 +100,9 @@ export default function Home() {
   const handleLogin = (e: any) => {
 
     if( userEmail === "" ){
-      toast.error("Email is required");
+      toast({
+        title: "Email is required",
+      })
     }
 
     setLoading(true);
@@ -112,7 +116,9 @@ export default function Home() {
       router.push("/confirm-feedback");
     }
     else{
-      toast.error("Email ID not found in the database");
+      toast({
+        title: "Email ID not found in the database",
+      })
     }
 
     setLoading(false);
@@ -156,7 +162,6 @@ export default function Home() {
                 onClick={handleLogin}
               >
                 Log in
-                <Toaster />
               </Button>
             </div>
           </form>

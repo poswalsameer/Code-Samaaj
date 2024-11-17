@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 import userDetailContext from "../context/UserDetailContext";
-import toast, { Toaster } from 'react-hot-toast';
+import { useToast } from "@/hooks/use-toast"
 
 export default function Component() {
   const usernameData = [
@@ -95,6 +95,8 @@ export default function Component() {
   const [formLink, setFormLink] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
+  const { toast } = useToast();
+
   const context = useContext(userDetailContext);
   if (context === undefined) {
     throw new Error("Context is not correctly defined");
@@ -106,10 +108,14 @@ export default function Component() {
   const handleData = (e: any) => {
 
     if( name === "" ){
-      toast.error("Full Name is required");
+      toast({
+        title: "Full Name is required",
+      })
     }
     if( formLink === "" ){
-      toast.error("Form Link is required");
+      toast({
+        title: "Form Link is required",
+      })
     }
 
     setLoading(true);
@@ -130,10 +136,14 @@ export default function Component() {
     } else {
 
       if( lowercaseName.length>0 && isNamePresent === false ){
-        toast.error("Name not found in the database");
+        toast({
+          title: "Name not found in the database",
+        })
       }
       if( formLink.length>0 && isLinkCorrect === false ){
-        toast.error("Link entered is not correct");
+        toast({
+          title: "Link entered is not correct",
+        })
       }
 
       console.log("No match");
@@ -215,7 +225,6 @@ export default function Component() {
                 onClick={handleData}
               >
                 Access Certificate
-                <Toaster />
               </Button>
             </div>
           </form>
