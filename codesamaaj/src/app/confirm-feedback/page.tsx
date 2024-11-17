@@ -91,6 +91,7 @@ export default function Component() {
 
   const correctFormLinkFirst = "https://docs.google.com/forms";
   const correctFormLinkSecond = "formResponse";
+  const correctFormLinkThird = "alreadyresponded";
 
   const [formLink, setFormLink] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -125,9 +126,9 @@ export default function Component() {
     const lowercaseName = name.toLowerCase();
     const isNamePresent = lowerCaseUsernames.includes(lowercaseName);
 
-    const isLinkCorrect =
-      formLink.includes(correctFormLinkFirst) &&
-      formLink.includes(correctFormLinkSecond);
+    const isSecondParameterCorrect = formLink.includes(correctFormLinkSecond) || formLink.includes(correctFormLinkThird);
+
+    const isLinkCorrect = formLink.includes(correctFormLinkFirst) && isSecondParameterCorrect;
 
     if (isNamePresent === true && isLinkCorrect === true) {
       setName(lowercaseName);
