@@ -123,11 +123,11 @@ export default function Home() {
       {loading ? (
         <div>Loading...</div>
       ) : (
-        <div className="w-full max-w-2xl space-y-8">
+        <div className="w-full max-w-lg sm:max-w-2xl space-y-8">
           <div className="text-center">
             <div className="h-32 w-full bg-white flex items-center justify-center">
-              <img src="./logo.png" alt="" className="h-28 w-28" />
-              <div className="ml-4 font-bold text-6xl">CODE SAMAAJ</div>
+              <img src="./logo.png" alt="" className="h-14 w-14 sm:h-28 sm:w-28" />
+              <div className="ml-2 font-bold text-3xl sm:ml-4 sm:font-bold sm:text-6xl">CODE SAMAAJ</div>
             </div>
             <p className="mt-10 text-sm text-gray-600">
               Enter your email to log in to your account
