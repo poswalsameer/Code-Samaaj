@@ -8,7 +8,9 @@ export async function POST( request: NextRequest, response: NextResponse ){
 
     try {
 
+        console.log("Requesy body before parsing: ", request.body);
         const requestBody: any = await request.json();
+        console.log("Requesy body after parsing: ", requestBody);
         const { email }: {email: string} = requestBody;
 
         //VALIDATING THE DATA
@@ -26,7 +28,7 @@ export async function POST( request: NextRequest, response: NextResponse ){
             console.log( "User found in DB: ", userInDB);
             
             return NextResponse.json(
-                {userDetails: userInDB},
+                {message: "Logged In"},
                 {status: 200}
             )
         }
@@ -37,9 +39,9 @@ export async function POST( request: NextRequest, response: NextResponse ){
         )
         
     } 
-    catch (error) {
+    catch (error: any) {
         return NextResponse.json(
-            {message: "Error while logging in the user"},
+            {message: error.message},
             {status: 500}
         )    
     }
