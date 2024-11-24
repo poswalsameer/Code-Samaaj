@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
 import userDetailContext from "../context/UserDetailContext"
 import Cookies from 'js-cookie';
+import FeedbackWithAuth from '../appComponents/FeedbackWithAuth'
 
 interface FeedbackData{
   overallRating: string;
@@ -20,7 +21,7 @@ interface FeedbackData{
   improvements: string;
 }
 
-export default function BootcampFeedback() {
+function BootcampFeedback() {
 
   const [feedbackData, setFeedbackData] = useState<FeedbackData>({
     overallRating: '',
@@ -43,7 +44,7 @@ export default function BootcampFeedback() {
     throw new Error("Context not defined correctly");
   }
 
-  const { canGiveFeedback } = context;
+  const { canGiveFeedback, setCanGiveFeedback, setDescriptionCharLimit } = context;
 
   const ratingScale = Array.from({ length: 10 }, (_, i) => i + 1)
 
@@ -60,6 +61,35 @@ export default function BootcampFeedback() {
     }
 
   }
+
+  useEffect(() => {
+
+    const fetchAdminData = async () => {
+      try {
+        const response = await fetch('/api/admin-control', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch admin data');
+        }
+
+        const data = await response.json();
+
+        console.log("Value of canGiveFeedback state: ", data.data.canGiveFeedback);
+
+        // Update state with data from the database
+        setCanGiveFeedback(data.data.canGiveFeedback);
+        setDescriptionCharLimit(String(data.data.descriptionCharLimit));
+      } catch (error) {
+        console.error('Error fetching admin data:', error);
+      }
+    };
+
+    fetchAdminData();
+
+  }, []);
 
   useEffect( () => {
     
@@ -207,7 +237,7 @@ export default function BootcampFeedback() {
         </CardContent>
         <CardFooter>
           <Button type="submit" className="w-full bg-gray-900 text-white hover:bg-gray-700"
-          disabled={!canGiveFeedback || !authTokenExists }
+          disabled={!canGiveFeedback}
           >
             Submit Feedback
           </Button>
@@ -218,7 +248,7 @@ export default function BootcampFeedback() {
 }
 
 
-
+export default FeedbackWithAuth(BootcampFeedback)
 
 
 

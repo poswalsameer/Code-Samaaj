@@ -1,6 +1,6 @@
 'use client'
 
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Switch } from "@/components/ui/switch"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -8,31 +8,102 @@ import userDetailContext from '../context/UserDetailContext'
 import { Button } from '@/components/ui/button'
 import withAuth from '../appComponents/WithAuth'
 
+// FLOW TO UPDATE THE DATA IN DB FROM THE FRONTEND:
+
+
 function AdminPage() {
 
   const [currentCharLimit, setCurrentCharLimit] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   const context = useContext(userDetailContext);
-
   if( context === undefined ){
     throw new Error("Context is not defined correctly");
   }
-
   const { canGiveFeedback, setCanGiveFeedback, descriptionCharLimit, setDescriptionCharLimit } = context;
 
-  const toggleFeedbackButton = () => {
-    console.log("Value before toggling: ", canGiveFeedback);
-    setCanGiveFeedback( (prev) => (!prev));
-  }
+  // API endpoint
+  const apiEndpoint = "/api/admin-control";
 
-  const changeCharLimit = (e: any) => {
-    // console.log("Value before changing the description limit: ", );
-    setCurrentCharLimit(e.target.value);
-  }
+  // Function to update the feedback toggle
+  const toggleFeedbackButton = async () => {
+    try {
+      setLoading(true);
 
-  const setCharLimit = () => {
-    setDescriptionCharLimit(currentCharLimit);
-  }
+      const response = await fetch(apiEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ canGiveFeedback: !canGiveFeedback }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update feedback state");
+      }
+
+      const data = await response.json();
+      setCanGiveFeedback(data.data.canGiveFeedback);
+
+    } 
+    catch (error:any) {
+      console.error(error.message);
+    } 
+    finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to update the character limit
+  const setCharLimit = async () => {
+    try {
+      setLoading(true);
+
+      const response = await fetch(apiEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ descriptionCharLimit: Number(currentCharLimit) }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update description character limit");
+      }
+
+      const data = await response.json();
+      setDescriptionCharLimit(data.data.descriptionCharLimit);
+    } catch (error: any) {
+      console.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+
+    const fetchAdminData = async () => {
+      try {
+        const response = await fetch('/api/admin-control', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch admin data');
+        }
+
+        const data = await response.json();
+
+        console.log("Value of canGiveFeedback state: ", data.data.canGiveFeedback);
+
+        // Update state with data from the database
+        setCanGiveFeedback(data.data.canGiveFeedback);
+        setDescriptionCharLimit(String(data.data.descriptionCharLimit));
+      } catch (error) {
+        console.error('Error fetching admin data:', error);
+      }
+    };
+
+    fetchAdminData();
+
+  }, []);
   
 
   return (
@@ -62,7 +133,7 @@ function AdminPage() {
               id="character-limit"
               type="number"
               value={currentCharLimit}
-              onChange={changeCharLimit}
+              onChange={(e) => setCurrentCharLimit(e.target.value)}
               className="max-w-xs"
             />
             <Button onClick={setCharLimit}>
