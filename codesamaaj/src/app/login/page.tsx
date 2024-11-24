@@ -14,6 +14,7 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import LoadingSpinner from "../appComponents/Loading";
+import Cookies from 'js-cookie';
 
 export default function Login() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -42,6 +43,7 @@ export default function Login() {
       if (loginResponse.status === 200) {
         setLoading(false);
         console.log("Response from the API is: ", loginResponse);
+        Cookies.set('authToken', 'TheUserIsAuthenticatedToNextRoute')
         router.push("/confirm-feedback");
       } else {
         toast({

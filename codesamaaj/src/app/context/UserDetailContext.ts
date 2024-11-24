@@ -5,6 +5,12 @@ interface UserDetailContextType {
     setUserEmail: Dispatch<SetStateAction<string>>;
     name: string;
     setName: Dispatch<SetStateAction<string>>;
+    canGiveFeedback: boolean;
+    setCanGiveFeedback: Dispatch<SetStateAction<boolean>>;
+    descriptionCharLimit: string;
+    setDescriptionCharLimit: Dispatch<SetStateAction<string>>;
+    authToken: boolean;
+    setAuthToken: Dispatch<SetStateAction<boolean>>;
   }
 
 const userDetailContext = React.createContext<UserDetailContextType | undefined>(undefined);

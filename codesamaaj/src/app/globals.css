@@ -29,6 +29,20 @@ body {
   background-size: 5px 5px;
 }
 
+#bg-grid-pattern-feedback{
+  background-image: 
+    linear-gradient(to right, #e5e7eb 1px, transparent 1px),
+    linear-gradient(to bottom, #e5e7eb 1px, transparent 1px);
+  background-size: 5px 5px;
+}
+
+#bg-admin{
+  background-image: 
+    linear-gradient(to right, #e5e7eb 1px, transparent 1px),
+    linear-gradient(to bottom, #e5e7eb 1px, transparent 1px);
+  background-size: 5px 5px;
+}
+
 @layer base {
   :root {
 

@@ -16,6 +16,7 @@ import {
 import { Label } from "@/components/ui/label";
 import axios from "axios";
 import LoadingSpinner from "../appComponents/Loading";
+import Cookies from 'js-cookie';
 
 interface UserDetails {
   fullName: string;
@@ -102,45 +103,6 @@ export default function Home() {
   //   "21485@yenepoya.edu.in",
   // ];
 
-  // const [loading, setLoading] = useState<boolean>(false);
-
-  // const router = useRouter();
-  // const { toast } = useToast();
-
-  // // CONTEXT
-  // const context = useContext(userDetailContext);
-  // if (context === undefined) {
-  //   throw new Error("Context is not defined correctly");
-  // }
-  // const { userEmail, setUserEmail } = context;
-
-  // const handleLogin = (e: any) => {
-
-  //   if( userEmail === "" ){
-  //     toast({
-  //       title: "Email is required",
-  //     })
-  //   }
-
-  //   setLoading(true);
-  //   e.preventDefault();
-  //   console.log("Email entered by the user: ", userEmail);
-
-  //   const isEmailPresent = userEmailData.includes(userEmail);
-
-  //   if (isEmailPresent === true) {
-  //     setUserEmail(userEmail);
-  //     router.push("/confirm-feedback");
-  //   }
-  //   else{
-  //     toast({
-  //       title: "Email ID not found in the database",
-  //     })
-  //   }
-
-  //   setLoading(false);
-  // };
-
   const [userDetails, setUserDetails] = useState<UserDetails>({
     fullName: "",
     rollNumber: "",
@@ -161,6 +123,7 @@ export default function Home() {
       if (signupResponse) {
         setLoading(false);
         console.log("Signup completed successfully: ", signupResponse);
+        Cookies.set('authToken', 'TheUserIsAuthenticatedToNextRoute');
         router.push("/confirm-feedback");
       }
     } catch (error) {
