@@ -1,18 +1,24 @@
-"use client"
+"use client";
 
-import { useContext, useEffect, useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
-import { useRouter } from "next/navigation"
-import { useToast } from "@/hooks/use-toast"
-import userDetailContext from "../context/UserDetailContext"
-import Cookies from 'js-cookie';
-import FeedbackWithAuth from '../appComponents/FeedbackWithAuth'
+import { useContext, useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import userDetailContext from "../context/UserDetailContext";
+import Cookies from "js-cookie";
+import FeedbackWithAuth from "../appComponents/FeedbackWithAuth";
 
-interface FeedbackData{
+interface FeedbackData {
   overallRating: string;
   referralRating: string;
   mentorRating: string;
@@ -22,110 +28,163 @@ interface FeedbackData{
 }
 
 function BootcampFeedback() {
-
   const [feedbackData, setFeedbackData] = useState<FeedbackData>({
-    overallRating: '',
-    referralRating: '',
-    mentorRating: '',
-    mentorFeedback: '',
-    nextBootcampParticipation: '',
-    improvements: ''
-  })
+    overallRating: "",
+    referralRating: "",
+    mentorRating: "",
+    mentorFeedback: "",
+    nextBootcampParticipation: "",
+    improvements: "",
+  });
   const [cookieValue, setCookieValue] = useState<string | undefined>(undefined);
   const [authTokenExists, setAuthTokenExists] = useState<boolean>(false);
+  const [currentUserEmail, setCurrentUserEmail] = useState<string>('');
 
-  const router = useRouter()
-  const { toast } = useToast()
+  const router = useRouter();
+  const { toast } = useToast();
   const context = useContext(userDetailContext);
 
-  const cookieToken: string | undefined = Cookies.get('authToken');
+  const cookieToken: string | undefined = Cookies.get("authToken");
 
-  if( context === undefined ){
+  if (context === undefined) {
     throw new Error("Context not defined correctly");
   }
 
-  const { canGiveFeedback, setCanGiveFeedback, setDescriptionCharLimit } = context;
+  const { userEmail, setUserEmail, canGiveFeedback, setCanGiveFeedback, setDescriptionCharLimit } =
+    context;
 
-  const ratingScale = Array.from({ length: 10 }, (_, i) => i + 1)
+  const ratingScale = Array.from({ length: 10 }, (_, i) => i + 1);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Value inside the state userEmail:" , userEmail);
 
-    if( !feedbackData.overallRating || !feedbackData.referralRating || !feedbackData.improvements || !feedbackData.mentorFeedback || !feedbackData.mentorRating || !feedbackData.nextBootcampParticipation ){
+    if (
+      !feedbackData.overallRating ||
+      !feedbackData.referralRating ||
+      !feedbackData.improvements ||
+      !feedbackData.mentorFeedback ||
+      !feedbackData.mentorRating ||
+      !feedbackData.nextBootcampParticipation
+    ) {
       toast({
         title: "Every field is required!",
       });
-    }
-    else{
-      console.log("The data from the state is: ", feedbackData);
-    }
+    } else {
+      // console.log("The data from the state is: ", feedbackData);
+      try {
+        const feedbackDataToBackend = {
+          email: currentUserEmail, // The unique identifier
+          overallRating: feedbackData.overallRating, // Replace with actual data
+          referralRating: feedbackData.referralRating,
+          mentorRating: feedbackData.mentorRating,
+          mentorFeedback: feedbackData.mentorFeedback,
+          nextBootcampParticipation: feedbackData.nextBootcampParticipation,
+          improvements: feedbackData.improvements,
+        };
 
-  }
+        const response = await fetch("/api/submit-feedback", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(feedbackDataToBackend),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          console.log("Feedback added successfully!");
+        } else {
+          console.log(`Error: ${result.message}`);
+        }
+      } catch (error) {
+        console.error("Error in the catch part on the frontend while adding feedback:", error);
+        // alert("Something went wrong!");
+      }
+    }
+  };
 
   useEffect(() => {
 
+    // const getUserEmail = () => {
+
+    // }
+
     const fetchAdminData = async () => {
       try {
-        const response = await fetch('/api/admin-control', {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("/api/admin-control", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch admin data');
+          throw new Error("Failed to fetch admin data");
         }
 
         const data = await response.json();
 
-        console.log("Value of canGiveFeedback state: ", data.data.canGiveFeedback);
+        console.log(
+          "Value of canGiveFeedback state: ",
+          data.data.canGiveFeedback
+        );
 
         // Update state with data from the database
         setCanGiveFeedback(data.data.canGiveFeedback);
         setDescriptionCharLimit(String(data.data.descriptionCharLimit));
       } catch (error) {
-        console.error('Error fetching admin data:', error);
+        console.error("Error fetching admin data:", error);
       }
     };
 
     fetchAdminData();
-
   }, []);
 
-  useEffect( () => {
-    
-    if( cookieToken ){
+  useEffect(() => {
+    if (cookieToken) {
       setAuthTokenExists(true);
       setCookieValue(cookieToken);
-    }
-    else{
+    } else {
       setAuthTokenExists(false);
     }
-    
-  }, [cookieToken] )
+  }, [cookieToken]);
+
+  useEffect( () => {
+    console.log(userEmail);
+    setCurrentUserEmail(userEmail);
+  }, [] )
 
   return (
-    <form onSubmit={handleSubmit} className="w-full flex justify-center items-center py-6"
-    id="bg-grid-pattern-feedback"
+    <form
+      onSubmit={handleSubmit}
+      className="w-full flex justify-center items-center py-6"
+      id="bg-grid-pattern-feedback"
     >
       <Card className="w-[45rem] bg-white">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold text-gray-900">Bootcamp Feedback Form</CardTitle>
+          <CardTitle className="text-xl font-semibold text-gray-900">
+            Bootcamp Feedback Form
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
           {/* Overall Experience Rating */}
           <div className="space-y-4">
             <Label className="text-base font-medium text-gray-900">
-              How would you rate your overall experience of this Bootcamp? <span className="text-red-500">*</span>
+              How would you rate your overall experience of this Bootcamp?{" "}
+              <span className="text-red-500">*</span>
             </Label>
             <div className="space-y-2">
               <RadioGroup
                 value={feedbackData.overallRating}
-                onValueChange={ (value: string) => setFeedbackData({...feedbackData, overallRating: value}) }
+                onValueChange={(value: string) =>
+                  setFeedbackData({ ...feedbackData, overallRating: value })
+                }
                 className="flex justify-between items-center"
               >
                 {ratingScale.map((number) => (
                   <div key={number} className="flex items-center">
-                    <RadioGroupItem value={number.toString()} id={`rating-${number}`} />
+                    <RadioGroupItem
+                      value={number.toString()}
+                      id={`rating-${number}`}
+                    />
                   </div>
                 ))}
               </RadioGroup>
@@ -142,17 +201,23 @@ function BootcampFeedback() {
           {/* Referral Rating */}
           <div className="space-y-4">
             <Label className="text-base font-medium text-gray-900">
-              How likely are you to refer this bootcamp to your friends? <span className="text-red-500">*</span>
+              How likely are you to refer this bootcamp to your friends?{" "}
+              <span className="text-red-500">*</span>
             </Label>
             <div className="space-y-2">
               <RadioGroup
                 value={feedbackData.referralRating}
-                onValueChange={ (value: string) => setFeedbackData({...feedbackData, referralRating: value }) }
+                onValueChange={(value: string) =>
+                  setFeedbackData({ ...feedbackData, referralRating: value })
+                }
                 className="flex justify-between items-center"
               >
                 {ratingScale.map((number) => (
                   <div key={number} className="flex items-center">
-                    <RadioGroupItem value={number.toString()} id={`referral-${number}`} />
+                    <RadioGroupItem
+                      value={number.toString()}
+                      id={`referral-${number}`}
+                    />
                   </div>
                 ))}
               </RadioGroup>
@@ -169,17 +234,23 @@ function BootcampFeedback() {
           {/* Mentor Rating */}
           <div className="space-y-4">
             <Label className="text-base font-medium text-gray-900">
-              How would you rate your mentor? <span className="text-red-500">*</span>
+              How would you rate your mentor?{" "}
+              <span className="text-red-500">*</span>
             </Label>
             <div className="space-y-2">
               <RadioGroup
                 value={feedbackData.mentorRating}
-                onValueChange={ (value: string) => setFeedbackData({...feedbackData, mentorRating: value }) }
+                onValueChange={(value: string) =>
+                  setFeedbackData({ ...feedbackData, mentorRating: value })
+                }
                 className="flex justify-between items-center"
               >
                 {ratingScale.map((number) => (
                   <div key={number} className="flex items-center">
-                    <RadioGroupItem value={number.toString()} id={`mentor-${number}`} />
+                    <RadioGroupItem
+                      value={number.toString()}
+                      id={`mentor-${number}`}
+                    />
                   </div>
                 ))}
               </RadioGroup>
@@ -196,23 +267,38 @@ function BootcampFeedback() {
           {/* Mentor Feedback Text Area */}
           <div className="space-y-4">
             <Label className="text-base font-medium text-gray-900">
-              Drop a feedback for your mentor <span className="text-red-500">*</span>
+              Drop a feedback for your mentor{" "}
+              <span className="text-red-500">*</span>
             </Label>
-            <Textarea 
-            value={feedbackData.mentorFeedback}
-            onChange={ (e:any) => setFeedbackData({...feedbackData, mentorFeedback: e.target.value}) }
-            className="min-h-[100px] bg-white" placeholder="Your feedback..." />
+            <Textarea
+              value={feedbackData.mentorFeedback}
+              onChange={(e: any) =>
+                setFeedbackData({
+                  ...feedbackData,
+                  mentorFeedback: e.target.value,
+                })
+              }
+              className="min-h-[100px] bg-white"
+              placeholder="Your feedback..."
+            />
           </div>
 
           {/* Future Participation */}
           <div className="space-y-4">
             <Label className="text-base font-medium text-gray-900">
-              And finally... Would you participate in our next Bootcamp? <span className="text-red-500">*</span>
+              And finally... Would you participate in our next Bootcamp?{" "}
+              <span className="text-red-500">*</span>
             </Label>
-            <RadioGroup 
-            value={feedbackData.nextBootcampParticipation} 
-            onValueChange={(value: string) => setFeedbackData({...feedbackData, nextBootcampParticipation: value}) } 
-            className="flex flex-col space-y-2">
+            <RadioGroup
+              value={feedbackData.nextBootcampParticipation}
+              onValueChange={(value: string) =>
+                setFeedbackData({
+                  ...feedbackData,
+                  nextBootcampParticipation: value,
+                })
+              }
+              className="flex flex-col space-y-2"
+            >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="yes" id="participation-yes" />
                 <Label htmlFor="participation-yes">Yes</Label>
@@ -227,54 +313,37 @@ function BootcampFeedback() {
           {/* Improvements Text Area */}
           <div className="space-y-4">
             <Label className="text-base font-medium text-gray-900">
-              What improvements do you expect in the next Bootcamp? <span className="text-red-500">*</span>
+              What improvements do you expect in the next Bootcamp?{" "}
+              <span className="text-red-500">*</span>
             </Label>
-            <Textarea 
-            value={feedbackData.improvements}
-            onChange={ (e:any) => setFeedbackData({...feedbackData, improvements: e.target.value}) }
-            className="min-h-[100px] bg-white" placeholder="Your suggestions..." />
+            <Textarea
+              value={feedbackData.improvements}
+              onChange={(e: any) =>
+                setFeedbackData({
+                  ...feedbackData,
+                  improvements: e.target.value,
+                })
+              }
+              className="min-h-[100px] bg-white"
+              placeholder="Your suggestions..."
+            />
           </div>
         </CardContent>
         <CardFooter>
-          <Button type="submit" className="w-full bg-gray-900 text-white hover:bg-gray-700"
-          disabled={!canGiveFeedback}
+          <Button
+            type="submit"
+            className="w-full bg-gray-900 text-white hover:bg-gray-700"
+            disabled={!canGiveFeedback}
           >
             Submit Feedback
           </Button>
         </CardFooter>
       </Card>
     </form>
-  )
+  );
 }
 
-
-export default FeedbackWithAuth(BootcampFeedback)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default FeedbackWithAuth(BootcampFeedback);
 
 // "use client";
 
