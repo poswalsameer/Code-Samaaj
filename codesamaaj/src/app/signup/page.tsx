@@ -115,11 +115,9 @@ export default function Home() {
   const router = useRouter();
   const { toast } = useToast();
   const context = useContext(userDetailContext);
-
   if( context === undefined ){
     throw new Error("Context is not defined correctly");
   }
-
   const { userEmail, setUserEmail } = context;
 
   const signUpUser = async () => {
@@ -130,10 +128,10 @@ export default function Home() {
 
       if (signupResponse) {
         setLoading(false);
-        setUserEmail(userDetails.email);
-        console.log("Value inside the userEmail state: ", userEmail);
+        // setUserEmail(userDetails.email);
+        // console.log("Value inside the userEmail state: ", userEmail);
         console.log("Signup completed successfully: ", signupResponse);
-        Cookies.set('authToken', 'TheUserIsAuthenticatedToNextRoute');
+        Cookies.set('authToken', userDetails.email);
         router.push("/confirm-feedback");
       }
     } catch (error) {

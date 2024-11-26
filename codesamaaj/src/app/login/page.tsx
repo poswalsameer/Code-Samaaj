@@ -10,11 +10,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import LoadingSpinner from "../appComponents/Loading";
 import Cookies from 'js-cookie';
+import userDetailContext from "../context/UserDetailContext";
 
 export default function Login() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -24,6 +25,11 @@ export default function Login() {
 
   const router = useRouter();
   const { toast } = useToast();
+  const context = useContext(userDetailContext);
+  if( context === undefined ){
+    throw new Error("Context is not defined correctly");
+  }
+  const { userEmail, setUserEmail } = context;
 
   const loginUser = async (e: any) => {
     e.preventDefault();
@@ -42,8 +48,9 @@ export default function Login() {
 
       if (loginResponse.status === 200) {
         setLoading(false);
+        // setUserEmail(userDetails.email);
         console.log("Response from the API is: ", loginResponse);
-        Cookies.set('authToken', 'TheUserIsAuthenticatedToNextRoute')
+        Cookies.set('authToken', userDetails.email);
         router.push("/confirm-feedback");
       } else {
         toast({

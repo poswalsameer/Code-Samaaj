@@ -57,7 +57,7 @@ function BootcampFeedback() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Value inside the state userEmail:" , userEmail);
+    console.log("Value inside the state userEmail:" , currentUserEmail);
 
     if (
       !feedbackData.overallRating ||
@@ -93,6 +93,7 @@ function BootcampFeedback() {
 
         if (response.ok) {
           console.log("Feedback added successfully!");
+          router.push("/download-certificate")
         } else {
           console.log(`Error: ${result.message}`);
         }
@@ -148,8 +149,12 @@ function BootcampFeedback() {
   }, [cookieToken]);
 
   useEffect( () => {
-    console.log(userEmail);
-    setCurrentUserEmail(userEmail);
+    // console.log(userEmail);
+    const userEmailCookie = Cookies.get('authToken');
+    console.log("Email set inside the cookie: ", userEmailCookie);    
+    if( userEmailCookie ){
+      setCurrentUserEmail(userEmailCookie);
+    }
   }, [] )
 
   return (

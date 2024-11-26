@@ -33,6 +33,8 @@ export async function POST(req: NextRequest){
             improvements,
         } = await req.json();
 
+        console.log("The email we got from the frontend is this: ", email);
+
         const credentialsPath = path.join(process.cwd(), 'credentials.json');
         const credentials = JSON.parse(await readFile(credentialsPath, 'utf8'));
         const { client_email, private_key } = credentials;
@@ -99,7 +101,7 @@ export async function POST(req: NextRequest){
             valueInputOption: 'RAW',
             resource: {
             values: [
-                [feedbackData],
+                [overallRating, referralRating, mentorRating, mentorFeedback, nextBootcampParticipation, improvements],
             ],
             },
         };
