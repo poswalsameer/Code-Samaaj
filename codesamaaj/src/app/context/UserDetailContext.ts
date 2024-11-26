@@ -11,6 +11,8 @@ interface UserDetailContextType {
     setDescriptionCharLimit: Dispatch<SetStateAction<string>>;
     authToken: boolean;
     setAuthToken: Dispatch<SetStateAction<boolean>>;
+    certificateDescription: string;
+    setCertificateDescription: Dispatch<SetStateAction<string>>;
   }
 
 const userDetailContext = React.createContext<UserDetailContextType | undefined>(undefined);

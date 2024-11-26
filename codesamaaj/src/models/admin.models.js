@@ -9,6 +9,10 @@ const adminSchema = new mongoose.Schema({
     descriptionCharLimit: {
         type: Number,
         default: 200,
+    },
+    description: {
+        type: String,
+        default: '',
     }
 
 })

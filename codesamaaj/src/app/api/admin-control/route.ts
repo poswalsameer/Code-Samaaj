@@ -18,6 +18,7 @@ export async function GET() {
         data: {
           canGiveFeedback: adminData.canGiveFeedback,
           descriptionCharLimit: adminData.descriptionCharLimit,
+          description: adminData.description,
         },
       });
     } catch (error) {
@@ -30,12 +31,12 @@ export async function POST(req: NextRequest){
 
     try {
         // Parse the request body
-        const { canGiveFeedback, descriptionCharLimit } = await req.json();
+        const { canGiveFeedback, descriptionCharLimit, description } = await req.json();
     
-        console.log("Incoming value for canGiveFeedback: ", canGiveFeedback);
+        console.log("Incoming value for description: ", description);
 
         // Validate input and prepare the update object
-        const updateData: Partial<{ canGiveFeedback: boolean; descriptionCharLimit: number }> = {};
+        const updateData: Partial<{ canGiveFeedback: boolean; descriptionCharLimit: number; description: string }> = {};
     
         if (typeof canGiveFeedback !== 'undefined') {
           if (typeof canGiveFeedback !== 'boolean') {
@@ -50,6 +51,13 @@ export async function POST(req: NextRequest){
           }
           updateData.descriptionCharLimit = descriptionCharLimit;
         }
+        if( typeof description !== 'undefined' ){
+          console.log("Type of description: ", typeof description);
+          if( typeof description !== 'string' ){
+            return NextResponse.json({ message: "Invalid value for certificateDescription" }, { status: 400 });
+          }
+          updateData.description = description;
+        }
     
         // Ensure at least one field is provided
         if (Object.keys(updateData).length === 0) {
@@ -60,6 +68,7 @@ export async function POST(req: NextRequest){
         const adminId = '674359ab483aeb438e79406c';
     
         // Update the document in the admin collection
+        console.log("Existing Admin Document Before Update:", updateData);
         const updatedAdmin = await Admin.findByIdAndUpdate(
           adminId,
           { $set: updateData },
