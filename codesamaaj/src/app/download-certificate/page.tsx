@@ -1,15 +1,18 @@
 'use client'
 
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { jsPDF } from "jspdf";
 import { Button } from "@/components/ui/button";
 import { Download } from 'lucide-react'
 import userDetailContext from "../context/UserDetailContext";
 import { useToast } from "@/hooks/use-toast"
+import Cookies from 'js-cookie';
 
 const Certificate = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [currentUserEmail, setCurrentUserEmail] = useState<string | undefined>(undefined);
+  const [currentUsername, setCurrentUsername] = useState<string>('');
 
   const { toast } = useToast();
 
@@ -17,7 +20,7 @@ const Certificate = () => {
   if( context === undefined ){
     throw new Error("Context not defined correctly");
   }
-  const { name, setName, userEmail, setUserEmail } = context;
+  const { name, setName, userEmail, setUserEmail, canGiveFeedback, setCanGiveFeedback, descriptionCharLimit, setDescriptionCharLimit, certificateDescription, setCertificateDescription } = context;
 
   function capitalizeWords(name: string) {
     return name
@@ -28,9 +31,9 @@ const Certificate = () => {
 
   const handleGeneratePDF = () => {
    
-    let username = name;
+    let username = currentUsername;
     username = capitalizeWords(username);
-    console.log("Name in the state: ", name);
+    console.log("Name in the state: ", currentUsername);
 
     if (!username) {
       toast({
@@ -38,12 +41,12 @@ const Certificate = () => {
       })
       return;
     }
-    if( !userEmail ){
-      toast({
-        title: "Email of the user not found",
-      })
-      return;
-    }
+    // if( !currentUserEmail ){
+    //   toast({
+    //     title: "Email of the user not found",
+    //   })
+    //   return;
+    // }
 
 
     const canvas = canvasRef.current;
@@ -64,8 +67,17 @@ const Certificate = () => {
       ctx.fillStyle = "black";
       ctx.textAlign = "center";
       const nameX = canvas.width / 2;
-      const nameY = canvas.height / 2 + 20;
+      const nameY = canvas.height / 2 + 10;
       ctx.fillText(username, nameX, nameY);
+
+      // Set the font for the description
+      ctx.font = "400 30px Arial";
+      ctx.textAlign = "center";
+
+      // Draw the description below the name
+      const descriptionX = canvas.width / 2;
+      const descriptionY = nameY + 70; 
+      ctx.fillText(certificateDescription, descriptionX, descriptionY);
 
       const pdf = new jsPDF({
         orientation: "landscape",
@@ -77,6 +89,73 @@ const Certificate = () => {
       pdf.save(`${username}_Certificate.pdf`);
     };
   };
+
+  useEffect(() => {
+
+    const fetchAdminData = async () => {
+      try {
+        const response = await fetch("/api/admin-control", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch admin data");
+        }
+
+        const data = await response.json();
+
+        console.log(
+          "Value of description state: ",
+          data.data.description
+        );
+
+        // Update state with data from the database
+        setCanGiveFeedback(data.data.canGiveFeedback);
+        setDescriptionCharLimit(String(data.data.descriptionCharLimit));
+        setCertificateDescription(data.data.description);
+      } catch (error) {
+        console.error("Error fetching admin data:", error);
+      }
+    };
+
+    const emailFromCookies = Cookies.get('authToken');
+    console.log("Value of the user email: ", emailFromCookies);
+    if( emailFromCookies ){
+      setCurrentUserEmail(emailFromCookies);
+    }
+
+    fetchAdminData();
+
+    const fetchUserDetails = async () => {
+
+      console.log("Inside fetch user details function");
+      const emailInsideCookie = Cookies.get('authToken');
+
+      try {
+        const response = await fetch('/api/get-user-details', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: emailInsideCookie }),
+        });
+    
+        const data = await response.json();
+        if (response.ok) {
+          console.log("User Details: ", data.user.fullName);
+          setCurrentUsername(data.user.fullName);
+        } else {
+          console.error("Error: ", data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching user details: ", error);
+      }
+    }
+
+    fetchUserDetails();
+
+  }, []);
 
   return (
 
