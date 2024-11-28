@@ -9,10 +9,27 @@ import { readFile } from 'fs/promises';
 connectDatabase();
 
 const SHEET_ID = '1q0eRPPTPcpogTmkg8HJa5JGd14Lk8XEBaBGTkqIhOeg'; 
+
+const envCredentials = {
+    type: process.env.NEXT_PUBLIC_GOOGLE_TYPE,
+    project_id: process.env.NEXT_PUBLIC_GOOGLE_PROJECT_ID,
+    private_key_id: process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY_ID,
+    private_key: process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY!.replace(/\\n/g, '\n'),
+    client_email: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_EMAIL,
+    client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    auth_uri: process.env.NEXT_PUBLIC_GOOGLE_AUTH_URI,
+    token_uri: process.env.NEXT_PUBLIC_GOOGLE_TOKEN_URI,
+    auth_provider_x509_cert_url: process.env.NEXT_PUBLIC_GOOGLE_AUTH_PROVIDER_CERT_URL,
+    client_x509_cert_url: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_CERT_URL,
+    universe_domain: process.env.NEXT_PUBLIC_UNIVERSAL_DOMAIN
+};
   
+
 const sheets = google.sheets('v4');
 
 export async function POST(req: NextRequest){
+
+    console.log("value inside the credentials object: ", envCredentials);
 
     try {
         const {
@@ -24,20 +41,6 @@ export async function POST(req: NextRequest){
             nextBootcampParticipation,
             improvements,
         } = await req.json();
-
-        const envCredentials = {
-            type: process.env.NEXT_PUBLIC_GOOGLE_TYPE,
-            project_id: process.env.NEXT_PUBLIC_GOOGLE_PROJECT_ID,
-            private_key_id: process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY_ID,
-            private_key: process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY!,
-            client_email: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_EMAIL,
-            client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-            auth_uri: process.env.NEXT_PUBLIC_GOOGLE_AUTH_URI,
-            token_uri: process.env.NEXT_PUBLIC_GOOGLE_TOKEN_URI,
-            auth_provider_x509_cert_url: process.env.NEXT_PUBLIC_GOOGLE_AUTH_PROVIDER_CERT_URL,
-            client_x509_cert_url: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_CERT_URL,
-            universe_domain: process.env.NEXT_PUBLIC_UNIVERSAL_DOMAIN
-        };
 
         const credentialsPath = path.join(process.cwd(), 'credentials.json');
         const credentials = JSON.parse(await readFile(credentialsPath, 'utf8'));
