@@ -42,8 +42,8 @@ export async function POST(req: NextRequest){
             improvements,
         } = await req.json();
 
-        const credentialsPath = path.join(process.cwd(), 'credentials.json');
-        const credentials = JSON.parse(await readFile(credentialsPath, 'utf8'));
+        // const credentialsPath = path.join(process.cwd(), 'credentials.json');
+        // const credentials = JSON.parse(await readFile(credentialsPath, 'utf8'));
         const { client_email, private_key } = envCredentials;
 
         const auth = new google.auth.GoogleAuth({
