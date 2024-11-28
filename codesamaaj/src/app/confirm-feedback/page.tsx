@@ -17,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import userDetailContext from "../context/UserDetailContext";
 import Cookies from "js-cookie";
 import FeedbackWithAuth from "../appComponents/FeedbackWithAuth";
+import LoadingSpinner from "../appComponents/Loading";
 
 interface FeedbackData {
   overallRating: string;
@@ -38,7 +39,8 @@ function BootcampFeedback() {
   });
   const [cookieValue, setCookieValue] = useState<string | undefined>(undefined);
   const [authTokenExists, setAuthTokenExists] = useState<boolean>(false);
-  const [currentUserEmail, setCurrentUserEmail] = useState<string>('');
+  const [currentUserEmail, setCurrentUserEmail] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
   const { toast } = useToast();
@@ -50,14 +52,22 @@ function BootcampFeedback() {
     throw new Error("Context not defined correctly");
   }
 
-  const { userEmail, setUserEmail, canGiveFeedback, setCanGiveFeedback, setDescriptionCharLimit } =
-    context;
+  const {
+    userEmail,
+    setUserEmail,
+    canGiveFeedback,
+    setCanGiveFeedback,
+    setDescriptionCharLimit,
+  } = context;
 
   const ratingScale = Array.from({ length: 10 }, (_, i) => i + 1);
 
   const handleSubmit = async (e: React.FormEvent) => {
+
+    setLoading(true);
+
     e.preventDefault();
-    console.log("Value inside the state userEmail:" , currentUserEmail);
+    console.log("Value inside the state userEmail:", currentUserEmail);
 
     if (
       !feedbackData.overallRating ||
@@ -73,6 +83,9 @@ function BootcampFeedback() {
     } else {
       // console.log("The data from the state is: ", feedbackData);
       try {
+
+        setLoading(true);
+
         const feedbackDataToBackend = {
           email: currentUserEmail, // The unique identifier
           overallRating: feedbackData.overallRating, // Replace with actual data
@@ -93,19 +106,31 @@ function BootcampFeedback() {
 
         if (response.ok) {
           console.log("Feedback added successfully!");
-          router.push("/download-certificate")
+          setLoading(false);
+          router.push("/download-certificate");
         } else {
+          setLoading(false);
+          toast({
+            title: "Error while adding feedback!",
+          });
           console.log(`Error: ${result.message}`);
         }
-      } catch (error) {
-        console.error("Error in the catch part on the frontend while adding feedback:", error);
+      } 
+      catch (error) {
+        setLoading(false);
+        toast({
+          title: "Cannot add your feedback at this moment!",
+        });
+        console.error(
+          "Error in the catch part on the frontend while adding feedback:",
+          error
+        );
         // alert("Something went wrong!");
       }
     }
   };
 
   useEffect(() => {
-
     // const getUserEmail = () => {
 
     // }
@@ -148,17 +173,16 @@ function BootcampFeedback() {
     }
   }, [cookieToken]);
 
-  useEffect( () => {
+  useEffect(() => {
     // console.log(userEmail);
-    const userEmailCookie = Cookies.get('authToken');
-    console.log("Email set inside the cookie: ", userEmailCookie);    
-    if( userEmailCookie ){
+    const userEmailCookie = Cookies.get("authToken");
+    console.log("Email set inside the cookie: ", userEmailCookie);
+    if (userEmailCookie) {
       setCurrentUserEmail(userEmailCookie);
     }
-  }, [] )
+  }, []);
 
-  return (
-
+  return !loading ? (
     <form
       onSubmit={handleSubmit}
       className="w-full flex justify-center items-center py-6"
@@ -346,6 +370,8 @@ function BootcampFeedback() {
         </CardFooter>
       </Card>
     </form>
+  ) : (
+    <LoadingSpinner size={30} textSize="text-lg" />
   );
 }
 

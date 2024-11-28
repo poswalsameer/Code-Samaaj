@@ -1,13 +1,17 @@
 interface LoadingSpinnerProps {
-    size?: number;
-    textSize?: string;
-  }
-  
-  const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
-    size = 24, 
-    textSize = 'text-base'
-  }) => {
-    return (
+  size?: number;
+  textSize?: string;
+}
+
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+  size = 24,
+  textSize = "text-base",
+}) => {
+  return (
+    <div
+      className="min-h-screen flex flex-col items-center justify-center "
+      id="bg-grid-pattern-signup"
+    >
       <div className="flex items-center justify-center space-x-2">
         <svg
           width={size}
@@ -39,7 +43,8 @@ interface LoadingSpinnerProps {
         </svg>
         <span className={`font-semibold ${textSize}`}>LOADING</span>
       </div>
-    );
-  };
-  
-  export default LoadingSpinner;
+    </div>
+  );
+};
+
+export default LoadingSpinner;
