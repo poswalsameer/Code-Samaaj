@@ -96,7 +96,7 @@ export async function POST(req: NextRequest){
             },
         };
 
-        const response = await sheets.spreadsheets.values.append(request as any);
+        const response = await sheets.spreadsheets.values.update(request as any);
 
         if( response.status === 200 ){
             console.log("User feedback added to google sheet successfully");
