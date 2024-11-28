@@ -85,16 +85,6 @@ export async function POST(req: NextRequest){
             improvements,
         ];
 
-        // Update the feedback columns for the user
-        // await sheets.spreadsheets.values.update({
-        //     spreadsheetId,
-        //     range,
-        //     valueInputOption: 'RAW',
-        //     resource: {
-        //         values: [feedbackData], // Insert feedback data
-        //     },
-        // });
-
         const request = {
             spreadsheetId: spreadsheetId,
             range: range,  // Adjust the range as needed

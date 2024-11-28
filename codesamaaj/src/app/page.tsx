@@ -6,6 +6,7 @@ import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 import userDetailContext from "./context/UserDetailContext";
 import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
 
 export default function Home() {
   // const userEmailData = [
@@ -92,7 +93,11 @@ export default function Home() {
       id="bg-grid-pattern"
     >
       <div className="h-32 w-full flex items-center justify-center">
-        <img src="./logo.png" alt="" className="h-14 w-14 sm:h-28 sm:w-28 rounded-full" />
+        <img
+          src="./logo.png"
+          alt=""
+          className="h-14 w-14 sm:h-28 sm:w-28 rounded-full"
+        />
         <div className="ml-2 font-bold text-3xl sm:ml-4 sm:font-bold sm:text-6xl">
           CODE SAMAAJ
         </div>
@@ -100,16 +105,36 @@ export default function Home() {
       <div className="space-x-6">
         <Button
           className=" w-32 bg-gray-900 text-white transition-all delay-75 ease-linear hover:-translate-y-1"
-          onClick={ () => router.push("/signup") }
+          onClick={() => router.push("/signup")}
         >
           Sign Up
         </Button>
-        <Button className="w-32 bg-gray-900 text-white transition-all delay-75 ease-linear hover:-translate-y-1"
-        onClick={() => router.push("/login")}
+        <Button
+          className="w-32 bg-gray-900 text-white transition-all delay-75 ease-linear hover:-translate-y-1"
+          onClick={() => router.push("/login")}
         >
           Login
         </Button>
       </div>
+
+      <footer className="w-full absolute bottom-0 border-t-2 bg-white text-black py-4">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center">
+            <div className="ml-10 text-sm">&copy; 2024 CodeSamaaj</div>
+            <div className="mr-10 space-x-4">
+              <Link href="/privacy-policy" className="text-sm hover:underline">
+                Privacy Policy
+              </Link>
+              <Link
+                href="/terms-and-conditions"
+                className="text-sm hover:underline"
+              >
+                Terms & Conditions
+              </Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

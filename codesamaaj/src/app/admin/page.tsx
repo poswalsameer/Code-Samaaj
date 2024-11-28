@@ -173,7 +173,7 @@ function AdminPage() {
               onChange={(e) => setCurrentCharLimit(e.target.value)}
               className="max-w-xs"
             />
-            <Button onClick={setCharLimit}>Set Limit</Button>
+            <Button onClick={setCharLimit} >Set Limit</Button>
           </div>
           <p className="text-sm text-gray-500">
             Current limit: {descriptionCharLimit} characters
