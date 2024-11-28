@@ -7,10 +7,7 @@ connectDatabase();
 export async function POST( request: NextRequest){
 
     try {
-
-        console.log("Requesy body before parsing: ", request.body);
         const requestBody: any = await request.json();
-        console.log("Requesy body after parsing: ", requestBody);
         const { email }: {email: string} = requestBody;
 
         //VALIDATING THE DATA
@@ -25,8 +22,6 @@ export async function POST( request: NextRequest){
         const userInDB = await User.findOne({email});
 
         if( userInDB ){
-            console.log( "User found in DB: ", userInDB);
-            
             return NextResponse.json(
                 {message: "Logged In"},
                 {status: 200}
@@ -47,41 +42,3 @@ export async function POST( request: NextRequest){
     }
 
 }
-
-// export async function GET(request: NextRequest) {
-
-//     try {
-//       const requestBody: any = await request.json();
-//         const { email }: { email: string } = requestBody;
-  
-//       // VALIDATING THE DATA
-//       if (!email) {
-//         return NextResponse.json(
-//           { message: "Email is required to fetch user details" },
-//           { status: 400 }
-//         );
-//       }
-  
-//       // FIND THE USER IN THE DATABASE
-//       const userInDB = await User.findOne({ email });
-  
-//       if (userInDB) {
-//         console.log("User details fetched from DB: ", userInDB);
-  
-//         return NextResponse.json(
-//           { user: userInDB },
-//           { status: 200 }
-//         );
-//       }
-  
-//       return NextResponse.json(
-//         { message: "User not found in the database" },
-//         { status: 404 }
-//       );
-//     } catch (error: any) {
-//       return NextResponse.json(
-//         { message: error.message },
-//         { status: 500 }
-//       );
-//     }
-// }

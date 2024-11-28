@@ -8,15 +8,7 @@ import { readFile } from 'fs/promises';
 //CONNECTING TO THE DATABASE HERE
 connectDatabase();
 
-// const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
-const SHEET_ID = '1q0eRPPTPcpogTmkg8HJa5JGd14Lk8XEBaBGTkqIhOeg'; // Replace with your Google Sheet ID
-
-// const SERVICE_ACCOUNT_KEY_PATH = path.join(process.cwd(), 'credentials.json');
-
-// const auth = new google.auth.GoogleAuth({
-//     keyFile: SERVICE_ACCOUNT_KEY_PATH,
-//     scopes: SCOPES,
-// });
+const SHEET_ID = '1q0eRPPTPcpogTmkg8HJa5JGd14Lk8XEBaBGTkqIhOeg'; 
   
 const sheets = google.sheets('v4');
 
@@ -33,11 +25,23 @@ export async function POST(req: NextRequest){
             improvements,
         } = await req.json();
 
-        console.log("The email we got from the frontend is this: ", email);
+        const envCredentials = {
+            type: process.env.NEXT_PUBLIC_GOOGLE_TYPE,
+            project_id: process.env.NEXT_PUBLIC_GOOGLE_PROJECT_ID,
+            private_key_id: process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY_ID,
+            private_key: process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY!.replace(/\\n/g, '\n'),
+            client_email: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_EMAIL,
+            client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+            auth_uri: process.env.NEXT_PUBLIC_GOOGLE_AUTH_URI,
+            token_uri: process.env.NEXT_PUBLIC_GOOGLE_TOKEN_URI,
+            auth_provider_x509_cert_url: process.env.NEXT_PUBLIC_GOOGLE_AUTH_PROVIDER_CERT_URL,
+            client_x509_cert_url: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_CERT_URL,
+            universe_domain: process.env.NEXT_PUBLIC_UNIVERSAL_DOMAIN
+        };
 
         const credentialsPath = path.join(process.cwd(), 'credentials.json');
         const credentials = JSON.parse(await readFile(credentialsPath, 'utf8'));
-        const { client_email, private_key } = credentials;
+        const { client_email, private_key } = envCredentials;
 
         const auth = new google.auth.GoogleAuth({
             credentials: { client_email, private_key },
@@ -50,7 +54,7 @@ export async function POST(req: NextRequest){
         // Fetch all rows to locate the user
         const getRows = await sheets.spreadsheets.values.get({
             spreadsheetId,
-            range: 'Sheet1!A2:E', // Assuming user details are here
+            range: 'Sheet1!A2:E',
         });
 
         const rows = getRows.data.values;
@@ -63,7 +67,7 @@ export async function POST(req: NextRequest){
         }
 
         // Locate the user row using the email
-        const userRowIndex = rows.findIndex(row => row[3] === email); // Assuming email is in column D (index 3)
+        const userRowIndex = rows.findIndex(row => row[3] === email);
 
         if (userRowIndex === -1) {
             return NextResponse.json(
@@ -73,7 +77,7 @@ export async function POST(req: NextRequest){
         }
 
         // Define the range for feedback columns (F-K)
-        const range = `Sheet1!F${userRowIndex + 2}:K${userRowIndex + 2}`; // Row index +2 to account for 1-based index and header
+        const range = `Sheet1!F${userRowIndex + 2}:K${userRowIndex + 2}`;
 
         // Prepare feedback data
         const feedbackData = [
@@ -98,17 +102,13 @@ export async function POST(req: NextRequest){
 
         const response = await sheets.spreadsheets.values.update(request as any);
 
-        if( response.status === 200 ){
-            console.log("User feedback added to google sheet successfully");
-            
+        if( response.status === 200 ){            
             return NextResponse.json(
                 {message: "Feedback created"},
                 {status: 200}
             )
         }
         else{
-            console.log("Cannot add user feedback, inside the else part");
-
             return NextResponse.json(
                 {message: "Error while adding user feedback in else part"},
                 {status: 500}

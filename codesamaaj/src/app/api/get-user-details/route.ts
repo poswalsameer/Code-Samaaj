@@ -22,8 +22,6 @@ export async function POST(request: NextRequest) {
       const userInDB = await User.findOne({ email });
   
       if (userInDB) {
-        console.log("User details fetched from DB: ", userInDB);
-  
         return NextResponse.json(
           { user: userInDB },
           { status: 200 }

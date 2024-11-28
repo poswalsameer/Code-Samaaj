@@ -17,14 +17,28 @@ interface RequestBody {
 }
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
-const SHEET_ID = '1q0eRPPTPcpogTmkg8HJa5JGd14Lk8XEBaBGTkqIhOeg'; // Replace with your Google Sheet ID
+const SHEET_ID = '1q0eRPPTPcpogTmkg8HJa5JGd14Lk8XEBaBGTkqIhOeg';
 
 const SERVICE_ACCOUNT_KEY_PATH = path.join(process.cwd(), 'credentials.json');
 
+const envCredentials = {
+    type: process.env.NEXT_PUBLIC_GOOGLE_TYPE,
+    project_id: process.env.NEXT_PUBLIC_GOOGLE_PROJECT_ID,
+    private_key_id: process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY_ID,
+    private_key: process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY!.replace(/\\n/g, '\n'),
+    client_email: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_EMAIL,
+    client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    auth_uri: process.env.NEXT_PUBLIC_GOOGLE_AUTH_URI,
+    token_uri: process.env.NEXT_PUBLIC_GOOGLE_TOKEN_URI,
+    auth_provider_x509_cert_url: process.env.NEXT_PUBLIC_GOOGLE_AUTH_PROVIDER_CERT_URL,
+    client_x509_cert_url: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_CERT_URL,
+    universe_domain: process.env.NEXT_PUBLIC_UNIVERSAL_DOMAIN
+};
+
 const auth = new google.auth.GoogleAuth({
-    keyFile: SERVICE_ACCOUNT_KEY_PATH,
+    credentials: envCredentials,
     scopes: SCOPES,
-  });
+});
   
 const sheets = google.sheets('v4');
 
@@ -63,25 +77,16 @@ export async function POST(req: NextRequest){
 
         const saveUserInDB = await createdUser.save();
 
-        if(saveUserInDB){
-            console.log("User created successfully: ", saveUserInDB);
-            
-            // return NextResponse.json(
-            //     {message: "User created successfully"},
-            //     {status: 200}
-            // )
-        }
-
         //WHOLE LOGIC TO ADD DATA IN GOOGLE SHEETS STARTS HERE
         const authClient = await auth.getClient();
         const request = {
             spreadsheetId: SHEET_ID,
-            range: 'Sheet1!A2:E',  // Adjust the range as needed
+            range: 'Sheet1!A2:E',  
             valueInputOption: 'RAW',
             insertDataOption: 'INSERT_ROWS',
             resource: {
             values: [
-                [fullName, rollNumber, whatsappNumber, email, course], // Data to append
+                [fullName, rollNumber, whatsappNumber, email, course],
             ],
             },
             auth: authClient,
@@ -90,24 +95,18 @@ export async function POST(req: NextRequest){
         const response = await sheets.spreadsheets.values.append(request as any);
 
         if( response.status === 200 ){
-            console.log("User added to google sheet successfully");
-            
             return NextResponse.json(
                 {message: "User created"},
                 {status: 200}
             )
         }
         else{
-            console.log("Cannot create the user, inside the else part");
-
             return NextResponse.json(
                 {message: "Error while creating in else part"},
                 {status: 500}
             )
             
         }
-
-        
         //WHOLE LOGIC TO ADD DATA IN GOOGLE SHEETS ENDS HERE
 
         return NextResponse.json(

@@ -37,10 +37,6 @@ function AdminLogin() {
       });
     }
     else{
-      console.log("Admin login details are: ", adminLoginDetails);
-      console.log("Correct email address is: ", correctAdminEmail);
-      console.log("Correct password is: ", correctAdminPassword);
-
 
       if( adminLoginDetails.email !== correctAdminEmail && adminLoginDetails.password === correctAdminPassword ){
         toast({

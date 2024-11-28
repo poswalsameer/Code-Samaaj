@@ -76,7 +76,6 @@ function AdminPage() {
       }
 
       const data = await response.json();
-      console.log("received data from the API: ", data);
       setCertificateDescription(data.data.description);
     } 
     catch (error: any){
@@ -124,12 +123,7 @@ function AdminPage() {
         }
 
         const data = await response.json();
-
-        console.log(
-          "Value of description state: ",
-          data.data.description
-        );
-
+        
         // Update state with data from the database
         setCanGiveFeedback(data.data.canGiveFeedback);
         setDescriptionCharLimit(String(data.data.descriptionCharLimit));

@@ -32,8 +32,6 @@ export async function POST(req: NextRequest){
     try {
         // Parse the request body
         const { canGiveFeedback, descriptionCharLimit, description } = await req.json();
-    
-        console.log("Incoming value for description: ", description);
 
         // Validate input and prepare the update object
         const updateData: Partial<{ canGiveFeedback: boolean; descriptionCharLimit: number; description: string }> = {};
@@ -52,7 +50,6 @@ export async function POST(req: NextRequest){
           updateData.descriptionCharLimit = descriptionCharLimit;
         }
         if( typeof description !== 'undefined' ){
-          console.log("Type of description: ", typeof description);
           if( typeof description !== 'string' ){
             return NextResponse.json({ message: "Invalid value for certificateDescription" }, { status: 400 });
           }
@@ -68,14 +65,11 @@ export async function POST(req: NextRequest){
         const adminId = '674359ab483aeb438e79406c';
     
         // Update the document in the admin collection
-        console.log("Existing Admin Document Before Update:", updateData);
         const updatedAdmin = await Admin.findByIdAndUpdate(
           adminId,
           { $set: updateData },
           { new: true } // Return the updated document
         );
-
-        console.log("Data in updatedAdmin: ", updatedAdmin);
     
         if (!updatedAdmin) {
           return NextResponse.json({ message: "Admin document not found" }, { status: 404 });

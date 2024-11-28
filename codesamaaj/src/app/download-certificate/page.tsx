@@ -41,13 +41,6 @@ const Certificate = () => {
       })
       return;
     }
-    // if( !currentUserEmail ){
-    //   toast({
-    //     title: "Email of the user not found",
-    //   })
-    //   return;
-    // }
-
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -105,11 +98,6 @@ const Certificate = () => {
 
         const data = await response.json();
 
-        console.log(
-          "Value of description state: ",
-          data.data.description
-        );
-
         // Update state with data from the database
         setCanGiveFeedback(data.data.canGiveFeedback);
         setDescriptionCharLimit(String(data.data.descriptionCharLimit));
@@ -120,7 +108,6 @@ const Certificate = () => {
     };
 
     const emailFromCookies = Cookies.get('authToken');
-    console.log("Value of the user email: ", emailFromCookies);
     if( emailFromCookies ){
       setCurrentUserEmail(emailFromCookies);
     }
@@ -129,7 +116,6 @@ const Certificate = () => {
 
     const fetchUserDetails = async () => {
 
-      console.log("Inside fetch user details function");
       const emailInsideCookie = Cookies.get('authToken');
 
       try {
@@ -143,7 +129,6 @@ const Certificate = () => {
     
         const data = await response.json();
         if (response.ok) {
-          console.log("User Details: ", data.user.fullName);
           setCurrentUsername(data.user.fullName);
         } else {
           console.error("Error: ", data.message);

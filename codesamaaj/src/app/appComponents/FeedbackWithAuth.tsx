@@ -14,9 +14,6 @@ const FeedbackWithAuth = (WrappedComponent: React.ComponentType) => {
       if (!authToken) {
         router.push('/login');
       }
-    //   else{
-    //     router.push("/admin");
-    //   }
     }, [authToken, router]);
 
     // If no token is found, don't render the component yet (loading state)

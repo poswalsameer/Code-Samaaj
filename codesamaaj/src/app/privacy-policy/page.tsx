@@ -20,7 +20,7 @@ interface ListItemProps {
     children: React.ReactNode;
   }
   
-export function ListItem({ children }: ListItemProps) {
+function ListItem({ children }: ListItemProps) {
     return (
       <li className="flex items-start space-x-2">
         <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-gray-500 flex-shrink-0" />

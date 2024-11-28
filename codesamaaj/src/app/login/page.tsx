@@ -32,13 +32,11 @@ export default function Login() {
   const { userEmail, setUserEmail } = context;
 
   const loginUser = async (e: any) => {
+    
     e.preventDefault();
-
-    console.log("Data sent to backend: ", userDetails);
 
     try {
       setLoading(true);
-      console.log("Email of the user entered is: ", userDetails);
       const loginResponse = await axios
         .post("/api/login", userDetails)
         .catch((error) => {
@@ -48,18 +46,16 @@ export default function Login() {
 
       if (loginResponse.status === 200) {
         setLoading(false);
-        // setUserEmail(userDetails.email);
-        console.log("Response from the API is: ", loginResponse);
         Cookies.set('authToken', userDetails.email);
         router.push("/confirm-feedback");
       } else {
+        setLoading(false);
         toast({
           title: "User details not found",
         });
       }
     } catch (error) {
       setLoading(false);
-      console.log("Error while logging the user");
       toast({
         title: "User not found, please signup",
       });

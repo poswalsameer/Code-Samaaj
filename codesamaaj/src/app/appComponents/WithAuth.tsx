@@ -14,9 +14,6 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
       if (!adminToken) {
         router.push('/admin-login');
       }
-    //   else{
-    //     router.push("/admin");
-    //   }
     }, [adminToken, router]);
 
     // If no token is found, don't render the component yet (loading state)

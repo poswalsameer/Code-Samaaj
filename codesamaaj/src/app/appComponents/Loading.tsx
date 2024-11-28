@@ -9,7 +9,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
 }) => {
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-center "
+      className="min-h-screen w-full flex flex-col items-center justify-center "
       id="bg-grid-pattern-signup"
     >
       <div className="flex items-center justify-center space-x-2">

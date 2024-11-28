@@ -67,7 +67,6 @@ function BootcampFeedback() {
     setLoading(true);
 
     e.preventDefault();
-    console.log("Value inside the state userEmail:", currentUserEmail);
 
     if (
       !feedbackData.overallRating ||
@@ -81,14 +80,14 @@ function BootcampFeedback() {
         title: "Every field is required!",
       });
     } else {
-      // console.log("The data from the state is: ", feedbackData);
+      
       try {
 
         setLoading(true);
 
         const feedbackDataToBackend = {
           email: currentUserEmail, // The unique identifier
-          overallRating: feedbackData.overallRating, // Replace with actual data
+          overallRating: feedbackData.overallRating, 
           referralRating: feedbackData.referralRating,
           mentorRating: feedbackData.mentorRating,
           mentorFeedback: feedbackData.mentorFeedback,
@@ -105,7 +104,6 @@ function BootcampFeedback() {
         const result = await response.json();
 
         if (response.ok) {
-          console.log("Feedback added successfully!");
           setLoading(false);
           router.push("/download-certificate");
         } else {
@@ -122,18 +120,14 @@ function BootcampFeedback() {
           title: "Cannot add your feedback at this moment!",
         });
         console.error(
-          "Error in the catch part on the frontend while adding feedback:",
+          "Error while adding feedback:",
           error
         );
-        // alert("Something went wrong!");
       }
     }
   };
 
   useEffect(() => {
-    // const getUserEmail = () => {
-
-    // }
 
     const fetchAdminData = async () => {
       try {
@@ -147,11 +141,6 @@ function BootcampFeedback() {
         }
 
         const data = await response.json();
-
-        console.log(
-          "Value of canGiveFeedback state: ",
-          data.data.canGiveFeedback
-        );
 
         // Update state with data from the database
         setCanGiveFeedback(data.data.canGiveFeedback);
@@ -176,7 +165,6 @@ function BootcampFeedback() {
   useEffect(() => {
     // console.log(userEmail);
     const userEmailCookie = Cookies.get("authToken");
-    console.log("Email set inside the cookie: ", userEmailCookie);
     if (userEmailCookie) {
       setCurrentUserEmail(userEmailCookie);
     }
