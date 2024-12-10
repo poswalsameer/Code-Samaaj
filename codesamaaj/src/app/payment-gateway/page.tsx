@@ -23,7 +23,7 @@ function Page() {
             <button className="h-9 w-32 rounded-md bg-gray-800 text-white hover:bg-gray-700"
             onClick={() => router.push("/signup")}
             >
-              Add to Cart
+              Pay Now
             </button>
           </div>
         </div>

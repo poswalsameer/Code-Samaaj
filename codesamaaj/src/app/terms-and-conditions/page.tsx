@@ -70,7 +70,7 @@ export default function TermsAndConditions() {
             <ul className="list-none space-y-2">
               <ListItem>Refunds can only be initiated if there is a valid and appropriate reason for the request.</ListItem>
               <ListItem>Refund requests must be made at least 3 days before the start date of the bootcamp.</ListItem>
-              <ListItem>Approved refunds will be processed to the original payment method within 7-14 working days.</ListItem>
+              <ListItem>Refund will be credited to the original payment account within 7-14 working days.</ListItem>
             </ul>
           </Section>
 
