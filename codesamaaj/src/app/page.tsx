@@ -80,12 +80,13 @@ export default function Home() {
         <div className="space-x-6 my-5 sm:my-10">
           <Button
             className=" w-32 bg-gray-900 text-white transition-all delay-75 ease-linear hover:-translate-y-1"
-            onClick={() => router.push("/signup")}
+            onClick={() => router.push("/payment-gateway")}
           >
-            Sign Up
+            {/* Sign Up */}
+            Get started
           </Button>
           <Button
-            className="w-32 bg-gray-900 text-white transition-all delay-75 ease-linear hover:-translate-y-1"
+            className=" w-32 bg-gray-900 text-white transition-all delay-75 ease-linear hover:-translate-y-1"
             onClick={() => router.push("/login")}
           >
             Login
