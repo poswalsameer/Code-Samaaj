@@ -62,6 +62,20 @@ export default function Home() {
         }
       });
       console.log("Response:", response.data);
+
+      if( response.data.success === true ){
+        const redirectToPaymentPage = response.data.data.instrumentResponse.redirectInfo.url;
+        router.push(redirectToPaymentPage)
+      }
+
+      // if( response.data.code === "PAYMENT_SUCCESS" ){
+      //   return NextResponse.redirect("http://localhost:3000/signup", {
+      //     status: 301,
+      //     paymentStatus: response.data.code,
+      //   })
+      // }
+
+
     } catch (error: any) {
       if (error.response) {
         console.log("Error Response:", error.response.data);
@@ -69,10 +83,6 @@ export default function Home() {
         console.log("Error:", error.message);
       }
     }
-
-    // if( response.data. ){
-    //   router.push
-    // }
 
   }
 
