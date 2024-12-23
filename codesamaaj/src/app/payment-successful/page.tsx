@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { PartyPopper } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect } from 'react'
+import React, { Suspense, useEffect } from 'react'
 import Cookies from 'js-cookie';
 
 function Page() {
@@ -42,4 +42,11 @@ function Page() {
   )
 }
 
-export default Page
+
+export default function SuspenseWrapper() {
+    return (
+      <Suspense fallback={<div>Loading...</div>}>
+        <Page />
+      </Suspense>
+    )
+  }
