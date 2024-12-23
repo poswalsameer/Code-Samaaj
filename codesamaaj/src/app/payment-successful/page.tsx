@@ -19,7 +19,7 @@ function Page() {
       // Set the cookie
       Cookies.set('paymentStatus', paymentStatus, { expires: 365 }); // Expires in 7 days
     }
-  }, []);
+  }, [searchParams]);
 
   return (
     <div 
