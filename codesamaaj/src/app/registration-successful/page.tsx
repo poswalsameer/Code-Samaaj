@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { PartyPopper } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React from 'react'
 
@@ -13,8 +14,12 @@ function Page() {
         className="min-h-screen bg-white flex flex-col text-3xl text-center gap-y-8 items-center justify-center p-4"
         id="bg-grid-pattern"
     >
-        <div className='max-w-4xl p-4' >
-        Your payment has failed due to some unavoidable issues. If any amount has been deducted from your account, that will be refunded within 3-5 working days. You can also contact us for any further queries.
+        <div className='max-w-4xl flex flex-col p-4 gap-y-3' >
+            <div className='flex justify-center items-center gap-x-3'>
+                You are successfully registered for the bootcamp 
+                <PartyPopper className=' h-8 w-8' /> 
+            </div>
+            <div>Once the bootcamp is complete, you can login again to download your certificates.</div>
         </div>
 
         <Button onClick={() => router.push("/")}>

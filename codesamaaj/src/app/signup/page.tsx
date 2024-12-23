@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import LoadingSpinner from "../appComponents/Loading";
 import Cookies from 'js-cookie';
+import SignupWithAuth from "../appComponents/SignupWithAuth";
 
 interface UserDetails {
   fullName: string;
@@ -26,7 +27,7 @@ interface UserDetails {
   course: string;
 }
 
-export default function Home() {
+function Home() {
   
   const [userDetails, setUserDetails] = useState<UserDetails>({
     fullName: "",
@@ -53,8 +54,8 @@ export default function Home() {
 
       if (signupResponse) {
         setLoading(false);
-        Cookies.set('authToken', userDetails.email);
-        router.push("/confirm-feedback");
+        // Cookies.set('authToken', userDetails.email);
+        router.push("/registration-successful");
       }
     } catch (error) {
       setLoading(false);
@@ -189,3 +190,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default SignupWithAuth(Home);

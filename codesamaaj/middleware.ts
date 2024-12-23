@@ -39,5 +39,4 @@
 //   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'], // Apply middleware to all pages except certain paths
 // };
 
-
-export const value: number = 2;
+export const number = 2;
