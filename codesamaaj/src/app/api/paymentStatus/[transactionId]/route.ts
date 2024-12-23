@@ -22,7 +22,7 @@ export async function POST(request: NextRequest){
 
     const dataSHA256 = sha256(checkSumString);
     console.log("dataSHA256: ", dataSHA256.toString());
-    
+
 
     const checkSum = dataSHA256 + "###" + process.env.NEXT_PUBLIC_SALT_INDEX;
     console.log("Final checkSum: ", checkSum);
@@ -45,13 +45,13 @@ export async function POST(request: NextRequest){
             // return NextResponse.redirect("http://localhost:3000/signup", {
             //     status: 301,
             // })
-            // const baseUrl = 'http://localhost:3000'; 
-            const baseUrl = 'https://code-samaaj.vercel.app'; 
+            // const baseUrl = 'http://localhost:3000';
+            const baseUrl = 'https://code-samaaj.vercel.app' 
             const res = NextResponse.redirect(`${baseUrl}/signup`, {
                 status: 301,
-            });
+            })
             res.cookies.set('paymentStatus', 'success', {
-                secure: process.env.NODE_ENV === 'production',
+                secure: false,
                 sameSite: 'none',
                 path: '/',
                 expires: new Date('9999-12-31T23:59:59.999Z'),

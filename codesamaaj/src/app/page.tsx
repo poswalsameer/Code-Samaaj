@@ -23,69 +23,7 @@ export default function Home() {
     else{
       console.log("Errors are present");
     }
-
-    // console.log("Values inside env: ");
-    // console.log("merchant id" ,process.env.NEXT_PUBLIC_MERCHANT_ID);
-    // console.log("salt key" ,process.env.NEXT_PUBLIC_SALT_KEY);
-    // console.log("salt index" ,process.env.NEXT_PUBLIC_SALT_INDEX);
-
-    // const transactionId = "MT-"+uuidv4().toString().slice(-6);
-    // const merchantUserId = "MUserId-"+uuidv4().toString().slice(-6);
-    // // console.log("Transaction Id: ", transactionId);
-
-    // const requestPayload = {
-    //   "merchantId": process.env.NEXT_PUBLIC_MERCHANT_ID,
-    //   "merchantTransactionId":transactionId,
-    //   "merchantUserId": merchantUserId,
-    //   "amount": 100,
-    //   "redirectUrl": `http://localhost:3000/api/paymentStatus/${transactionId}`,
-    //   "redirectMode": "POST",
-    //   "callbackUrl": `http://localhost:3000/api/paymentStatus/${transactionId}`,
-    //   "mobileNumber": "9999999999",
-    //   "paymentInstrument": {
-    //     "type": "PAY_PAGE"
-    //   }
-    // }
-
-    // const dataPayload = JSON.stringify(requestPayload);
-    // // console.log("This is the dataPayload: ", dataPayload);
-
-    // const payloadConvertedTo64 = Buffer.from(dataPayload).toString("base64");
-    // // console.log(payloadConvertedTo64);
-
-    // const fullURL = payloadConvertedTo64 + "/pg/v1/pay" + process.env.NEXT_PUBLIC_SALT_KEY;
-    // const dataSha256 = sha256(fullURL);
-
-    // const checkSum = dataSha256 + "###" + process.env.NEXT_PUBLIC_SALT_INDEX;
-    // // console.log("Checksum is: ", checkSum);
-
-    // const UAT_PAY_API_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay";
-    // // const UAT_PAY_API_URL = "https://api.phonepe.com/apis/hermes/pg/v1/pay";
-
-    // try {
-    //   const response = await axios.post(UAT_PAY_API_URL, {
-    //     request: payloadConvertedTo64,
-    //   }, {
-    //     headers: {
-    //       accept: "application/json",
-    //       "Content-Type": "application/json",
-    //       "X-VERIFY": checkSum,
-    //     }
-    //   });
-    //   console.log("Response:", response.data);
-
-    //   if( response.data.success === true ){
-    //     const redirectToPaymentPage = response.data.data.instrumentResponse.redirectInfo.url;
-    //     router.push(redirectToPaymentPage)
-    //   }
-    // } catch (error: any) {
-    //   if (error.response) {
-    //     console.log("Error Response:", error.response.data);
-    //   } else {
-    //     console.log("Error:", error.message);
-    //   }
-    // }
-
+    
   }
 
   return (
