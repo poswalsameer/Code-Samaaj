@@ -52,7 +52,7 @@ export async function POST(request: NextRequest){
             });
             res.cookies.set('paymentStatus', 'success', {
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
+                sameSite: 'none',
                 path: '/',
                 expires: new Date('9999-12-31T23:59:59.999Z'),
             });
