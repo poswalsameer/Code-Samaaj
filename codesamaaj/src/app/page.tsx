@@ -14,7 +14,7 @@ export default function Home() {
 
   const initialisePayment = async () => {
 
-    const response = await axios.post("http://localhost:3000/api/payment-gateway", {});
+    const response = await axios.post("/api/payment-gateway", {});
 
     if( response.data.APIResponse.success === true ){
       const redirectToPaymentPage = response.data.APIResponse.data.instrumentResponse.redirectInfo.url;
