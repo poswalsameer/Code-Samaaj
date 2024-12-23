@@ -29,10 +29,10 @@ export async function POST(req: NextRequest){
       "merchantId": process.env.NEXT_PUBLIC_MERCHANT_ID,
       "merchantTransactionId":transactionId,
       "merchantUserId": merchantUserId,
-      "amount": 100,
-      "redirectUrl": `http://localhost:3000/api/paymentStatus/${transactionId}`,
+      "amount": 1,
+      "redirectUrl": `https://code-samaaj.vercel.app/api/paymentStatus/${transactionId}`,
       "redirectMode": "POST",
-      "callbackUrl": `http://localhost:3000/api/paymentStatus/${transactionId}`,
+      "callbackUrl": `https://code-samaaj.vercel.app/api/paymentStatus/${transactionId}`,
       "mobileNumber": "9999999999",
       "paymentInstrument": {
         "type": "PAY_PAGE"
