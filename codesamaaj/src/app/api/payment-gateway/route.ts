@@ -6,6 +6,16 @@ import axios from "axios";
 
 export async function POST(req: NextRequest){
 
+    const response = NextResponse.json(
+        { message: "Request received successfully" },
+        { status: 200 }
+      );
+    
+      // Set the CORS headers
+      response.headers.set("Access-Control-Allow-Origin", "https://code-samaaj.vercel.app");
+      response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS"); 
+      response.headers.set("Access-Control-Allow-Headers", "Content-Type, X-VERIFY"); 
+
     console.log("Values inside env: ");
     console.log("merchant id" ,process.env.NEXT_PUBLIC_MERCHANT_ID);
     console.log("salt key" ,process.env.NEXT_PUBLIC_SALT_KEY);

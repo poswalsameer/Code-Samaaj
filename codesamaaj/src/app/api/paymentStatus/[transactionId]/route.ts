@@ -45,7 +45,8 @@ export async function POST(request: NextRequest){
             // return NextResponse.redirect("http://localhost:3000/signup", {
             //     status: 301,
             // })
-            const baseUrl = 'http://localhost:3000'; 
+            // const baseUrl = 'http://localhost:3000'; 
+            const baseUrl = 'https://code-samaaj.vercel.app'; 
             const res = NextResponse.redirect(`${baseUrl}/signup`, {
                 status: 301,
             });
