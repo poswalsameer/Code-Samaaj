@@ -11,11 +11,11 @@ function Page() {
 
   return (
     <div 
-        className="min-h-screen bg-white flex flex-col text-3xl text-center gap-y-8 items-center justify-center p-4"
+        className="min-h-screen bg-white flex flex-col text-xl sm:text-3xl text-center gap-y-8 items-center justify-center p-4"
         id="bg-grid-pattern"
     >
         <div className='max-w-4xl flex flex-col p-4 gap-y-3' >
-            <div className='flex justify-center items-center gap-x-3'>
+            <div className='flex flex-col sm:flex-row justify-center items-center gap-y-3 gap-x-3'>
                 You are successfully registered for the bootcamp 
                 <PartyPopper className=' h-8 w-8' /> 
             </div>

@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import userDetailContext from "../context/UserDetailContext";
@@ -16,7 +16,6 @@ import {
 import { Label } from "@/components/ui/label";
 import axios from "axios";
 import LoadingSpinner from "../appComponents/Loading";
-import Cookies from 'js-cookie';
 import SignupWithAuth from "../appComponents/SignupWithAuth";
 
 interface UserDetails {
@@ -39,23 +38,12 @@ function Home() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
-  // const searchParams = useSearchParams()
   const { toast } = useToast();
   const context = useContext(userDetailContext);
   if( context === undefined ){
     throw new Error("Context is not defined correctly");
   }
   const { userEmail, setUserEmail } = context;
-
-  // useEffect(() => {
-
-  //   const paymentStatus = searchParams.get('paymentStatus')
-
-  //   if (paymentStatus === 'success') {
-  //     // Set the cookie
-  //     Cookies.set('paymentStatus', paymentStatus, { expires: 365 }); // Expires in 7 days
-  //   }
-  // }, []);
 
   const signUpUser = async () => {
     try {

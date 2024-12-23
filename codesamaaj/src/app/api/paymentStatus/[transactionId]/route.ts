@@ -42,24 +42,11 @@ export async function POST(request: NextRequest){
         const response = await axios.request(options);
         console.log("Response data code: ", response.data.code);
         if( response.data.code === "PAYMENT_SUCCESS" ){
-            // return NextResponse.redirect("http://localhost:3000/signup", {
-            //     status: 301,
-            // })
             // const baseUrl = 'http://localhost:3000';
             const baseUrl = 'https://code-samaaj.vercel.app' 
             return NextResponse.redirect(`${baseUrl}/payment-successful?paymentStatus=${encodeURIComponent("success")}`, {
                 status: 301,
             });
-            // const res = NextResponse.redirect(`${baseUrl}/signup`, {
-            //     status: 301,
-            // })
-            // res.cookies.set('paymentStatus', 'success', {
-            //     secure: false,
-            //     sameSite: 'none',
-            //     path: '/',
-            //     expires: new Date('9999-12-31T23:59:59.999Z'),
-            // });
-            // return res;
         }
         else{
             return NextResponse.redirect("http://localhost:3000/payment-failed", {

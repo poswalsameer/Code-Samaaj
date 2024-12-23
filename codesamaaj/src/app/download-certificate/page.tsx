@@ -33,7 +33,6 @@ const Certificate = () => {
    
     let username = currentUsername;
     username = capitalizeWords(username);
-    console.log("Name in the state: ", currentUsername);
 
     if (!username) {
       toast({

@@ -1,4 +1,3 @@
-// withAuth.tsx
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
@@ -9,8 +8,6 @@ const SignupWithAuth = (WrappedComponent: React.ComponentType) => {
     const paymentStatus = Cookies.get('paymentStatus'); 
 
     useEffect(() => {
-        console.log("value of paymentStatus:", paymentStatus);
-
       if (!paymentStatus) {
         router.push('/');
       }

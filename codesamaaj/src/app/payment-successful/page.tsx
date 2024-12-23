@@ -16,14 +16,13 @@ function Page() {
     const paymentStatus = searchParams.get('paymentStatus')
 
     if (paymentStatus === 'success') {
-      // Set the cookie
-      Cookies.set('paymentStatus', paymentStatus, { expires: 365 }); // Expires in 7 days
+      Cookies.set('paymentStatus', paymentStatus, { expires: 365 });
     }
   }, [searchParams]);
 
   return (
     <div 
-        className="min-h-screen bg-white flex flex-col text-3xl text-center gap-y-8 items-center justify-center p-4"
+        className="min-h-screen bg-white flex flex-col text-2xl sm:text-3xl text-center gap-y-8 items-center justify-center p-4"
         id="bg-grid-pattern"
     >
         <div className='max-w-4xl flex flex-col p-4 gap-y-3' >

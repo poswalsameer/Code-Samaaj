@@ -10,7 +10,7 @@ function Page() {
 
   return (
     <div 
-        className="min-h-screen bg-white flex flex-col text-3xl text-center gap-y-8 items-center justify-center p-4"
+        className="min-h-screen bg-white flex flex-col text-2xl sm:text-3xl text-center gap-y-8 items-center justify-center p-4"
         id="bg-grid-pattern"
     >
         <div className='max-w-4xl p-4' >

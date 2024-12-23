@@ -11,10 +11,10 @@ export async function POST(req: NextRequest){
         { status: 200 }
       );
     
-      // Set the CORS headers
-      response.headers.set("Access-Control-Allow-Origin", "https://code-samaaj.vercel.app");
-      response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS"); 
-      response.headers.set("Access-Control-Allow-Headers", "Content-Type, X-VERIFY"); 
+    // Set the CORS headers
+    response.headers.set("Access-Control-Allow-Origin", "https://code-samaaj.vercel.app");
+    response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS"); 
+    response.headers.set("Access-Control-Allow-Headers", "Content-Type, X-VERIFY"); 
 
     console.log("Values inside env: ");
     console.log("merchant id" ,process.env.NEXT_PUBLIC_MERCHANT_ID);
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest){
       "merchantId": process.env.NEXT_PUBLIC_MERCHANT_ID,
       "merchantTransactionId":transactionId,
       "merchantUserId": merchantUserId,
-      "amount": 100,
+      "amount": 99900,
       "redirectUrl": `http://localhost:3000/api/paymentStatus/${transactionId}`,
       "redirectMode": "POST",
       "callbackUrl": `http://localhost:3000/api/paymentStatus/${transactionId}`,
