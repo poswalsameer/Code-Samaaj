@@ -47,16 +47,19 @@ export async function POST(request: NextRequest){
             // })
             // const baseUrl = 'http://localhost:3000';
             const baseUrl = 'https://code-samaaj.vercel.app' 
-            const res = NextResponse.redirect(`${baseUrl}/signup`, {
+            return NextResponse.redirect(`${baseUrl}/payment-successful?paymentStatus=${encodeURIComponent("success")}`, {
                 status: 301,
-            })
-            res.cookies.set('paymentStatus', 'success', {
-                secure: false,
-                sameSite: 'none',
-                path: '/',
-                expires: new Date('9999-12-31T23:59:59.999Z'),
             });
-            return res;
+            // const res = NextResponse.redirect(`${baseUrl}/signup`, {
+            //     status: 301,
+            // })
+            // res.cookies.set('paymentStatus', 'success', {
+            //     secure: false,
+            //     sameSite: 'none',
+            //     path: '/',
+            //     expires: new Date('9999-12-31T23:59:59.999Z'),
+            // });
+            // return res;
         }
         else{
             return NextResponse.redirect("http://localhost:3000/payment-failed", {

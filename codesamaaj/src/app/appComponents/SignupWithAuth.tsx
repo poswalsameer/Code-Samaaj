@@ -1,11 +1,12 @@
 // withAuth.tsx
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 
 const SignupWithAuth = (WrappedComponent: React.ComponentType) => {
   const ProtectedRoute = (props: any) => {
     const router = useRouter();
+    const searchParams = useSearchParams()
     const paymentStatus = Cookies.get('paymentStatus'); 
 
     useEffect(() => {
