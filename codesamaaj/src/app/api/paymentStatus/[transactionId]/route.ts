@@ -49,7 +49,8 @@ export async function POST(request: NextRequest){
             });
         }
         else{
-            return NextResponse.redirect("http://localhost:3000/payment-failed", {
+            const baseUrl = 'https://codesamaajcertification.vercel.app'
+            return NextResponse.redirect(`${baseUrl}/payment-failed`, {
                 status: 301,
             })
         }

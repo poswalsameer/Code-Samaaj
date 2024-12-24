@@ -12,7 +12,7 @@ export async function POST(req: NextRequest){
       );
     
     // Set the CORS headers
-    response.headers.set("Access-Control-Allow-Origin", "https://code-samaaj.vercel.app");
+    response.headers.set("Access-Control-Allow-Origin", "https://codesamaajcertification.vercel.app");
     response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS"); 
     response.headers.set("Access-Control-Allow-Headers", "Content-Type, X-VERIFY"); 
 
@@ -30,9 +30,9 @@ export async function POST(req: NextRequest){
       "merchantTransactionId":transactionId,
       "merchantUserId": merchantUserId,
       "amount": 100,
-      "redirectUrl": `https://codesamaajcertification.vercel.app/api/paymentStatus/${transactionId}`,
+      "redirectUrl": `http://localhost:3000/api/paymentStatus/${transactionId}`,
       "redirectMode": "POST",
-      "callbackUrl": `https://codesamaajcertification.vercel.app/api/paymentStatus/${transactionId}`,
+      "callbackUrl": `http://localhost:3000/api/paymentStatus/${transactionId}`,
       "mobileNumber": "9999999999",
       "paymentInstrument": {
         "type": "PAY_PAGE"
