@@ -50,7 +50,7 @@ export async function POST(request: NextRequest){
         }
         else{
             //comment
-            return NextResponse.redirect("http://localhost:3000/payment-failed", {
+            return NextResponse.redirect("https://code-samaaj.vercel.app/payment-failed", {
                 status: 301,
             })
         }
