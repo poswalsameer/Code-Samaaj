@@ -43,7 +43,7 @@ export async function POST(request: NextRequest){
         console.log("Response data code: ", response.data.code);
         if( response.data.code === "PAYMENT_SUCCESS" ){
             // const baseUrl = 'http://localhost:3000';
-            const baseUrl = 'https://code-samaaj.vercel.app' 
+            const baseUrl = 'https://codesamaajcertification.vercel.app' 
             return NextResponse.redirect(`${baseUrl}/payment-successful?paymentStatus=${encodeURIComponent("success")}`, {
                 status: 301,
             });
