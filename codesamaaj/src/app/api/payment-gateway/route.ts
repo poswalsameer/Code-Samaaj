@@ -29,7 +29,7 @@ export async function POST(req: NextRequest){
       "merchantId": process.env.NEXT_PUBLIC_MERCHANT_ID,
       "merchantTransactionId":transactionId,
       "merchantUserId": merchantUserId,
-      "amount": 99900,
+      "amount": 100,
       "redirectUrl": `http://localhost:3000/api/paymentStatus/${transactionId}`,
       "redirectMode": "POST",
       "callbackUrl": `http://localhost:3000/api/paymentStatus/${transactionId}`,
